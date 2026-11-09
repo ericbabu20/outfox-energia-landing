@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Box from "@mui/material/Box";
 
 const mobileQuery = "(max-width: 1024px)";
 
@@ -25,11 +26,36 @@ export function HeroBackground() {
   }, []);
 
   return (
-    <div className="hero-video" aria-hidden="true">
+    <Box
+      className="hero-video"
+      aria-hidden="true"
+      sx={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 0,
+        pointerEvents: "none",
+        overflow: "hidden",
+        bgcolor: "#120c1c",
+        "& video": {
+          display: "block",
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          objectPosition: { xs: "right center", md: "center center" },
+        },
+        "&::after": {
+          content: '""',
+          position: "absolute",
+          inset: 0,
+          background:
+            "linear-gradient(90deg, rgba(8, 5, 16, 0.5) 0%, rgba(8, 5, 16, 0.18) 46%, rgba(8, 5, 16, 0.08) 100%), linear-gradient(180deg, rgba(8, 5, 16, 0.28) 0%, rgba(8, 5, 16, 0) 24%)",
+        },
+      }}
+    >
       <video key={clip.mp4} autoPlay muted loop playsInline preload="auto">
         <source src={clip.webm} type="video/webm" />
         <source src={clip.mp4} type="video/mp4" />
       </video>
-    </div>
+    </Box>
   );
 }

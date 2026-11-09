@@ -1,35 +1,4 @@
-export type Locale = "es" | "en";
-
-export interface PromiseLine {
-  word: string;
-  caption: string;
-}
-
-export interface Messages {
-  metaTitle: string;
-  metaDescription: string;
-  ogImageAlt: string;
-  langLabel: string;
-  skip: string;
-  h1a: string;
-  h1b: string;
-  lead: string;
-  status: string;
-  promises: [PromiseLine, PromiseLine, PromiseLine];
-  cardTopKicker: string;
-  cardTop: string;
-  cardBottomKicker: string;
-  cardBottom: string;
-  footerRights: string;
-  privacy: string;
-  cookies: string;
-  privacyTitle: string;
-  privacyBody: string;
-  cookiesTitle: string;
-  cookiesBody: string;
-}
-
-export const messages: Record<Locale, Messages> = {
+export const messages = {
   es: {
     metaTitle: "Outfox Energía — Próximamente en España",
     metaDescription: "Energía más barata y más simple. Muy pronto, aquí.",

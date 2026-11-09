@@ -1,76 +1,36 @@
-import { cookies, nonEssentialCookies, type CookieParty, type CookieType } from "../../config/cookies.js";
+import { cookies, nonEssentialCookies } from "../../config/cookies.js";
 import { legal, legalMarker, legalText } from "../../config/legal.js";
 import { cookiesHref } from "../routes.js";
-import type { Locale } from "./messages.js";
 
-export type Inline =
-  | { kind: "text"; text: string }
-  | { kind: "link"; text: string; href: string; external?: boolean };
-
-export type Block =
-  | { kind: "p"; parts: Inline[] }
-  | { kind: "ul"; items: Inline[][] }
-  | { kind: "table"; headers: string[]; rows: string[][] };
-
-export interface LegalSection {
-  id: string;
-  heading: string;
-  blocks: Block[];
-}
-
-export interface LegalDocument {
-  title: string;
-  documentTitle: string;
-  description: string;
-  updated: string;
-  tocLabel: string;
-  sections: LegalSection[];
-}
-
-export interface ConsentCopy {
-  message: string;
-  accept: string;
-  reject: string;
-  configure: string;
-  save: string;
-  settingsLabel: string;
-  technical: string;
-  technicalNote: string;
-  preferences: string;
-  analytics: string;
-  advertising: string;
-  footerLink: string;
-}
-
-const typeLabels: Record<Locale, Record<CookieType, string>> = {
+const typeLabels = {
   es: { tecnica: "Técnica", preferencias: "Preferencias", analitica: "Analítica", publicidad: "Publicidad" },
   en: { tecnica: "Technical", preferencias: "Preferences", analitica: "Analytics", publicidad: "Advertising" },
 };
 
-const partyLabels: Record<Locale, Record<CookieParty, string>> = {
+const partyLabels = {
   es: { propia: "Propia", terceros: "De terceros" },
   en: { propia: "First-party", terceros: "Third-party" },
 };
 
-function text(value: string): Inline {
+function text(value) {
   return { kind: "text", text: value };
 }
 
-function link(label: string, href: string, external = false): Inline {
+function link(label, href, external = false) {
   return { kind: "link", text: label, href, external };
 }
 
-function paragraph(...parts: Inline[]): Block {
+function paragraph(...parts) {
   return { kind: "p", parts };
 }
 
-function contact(value: string, locale: Locale): Inline {
+function contact(value, locale) {
   const shown = legalText(value, locale);
   if (shown.includes("@") && !shown.startsWith("[")) return link(shown, `mailto:${shown}`);
   return text(shown);
 }
 
-function updatedLine(locale: Locale): string {
+function updatedLine(locale) {
   const raw = legal.lastUpdated.trim();
   if (!raw) return locale === "es" ? `Última actualización: ${legalMarker(locale)}` : `Last updated: ${legalMarker(locale)}`;
   const date = new Date(`${raw}T00:00:00`);
@@ -85,7 +45,7 @@ function updatedLine(locale: Locale): string {
   return locale === "es" ? `Última actualización: ${formatted}` : `Last updated: ${formatted}`;
 }
 
-function cookieRows(locale: Locale): string[][] {
+function cookieRows(locale) {
   return cookies.map((item) => [
     item.name,
     item.provider,
@@ -96,12 +56,12 @@ function cookieRows(locale: Locale): string[][] {
   ]);
 }
 
-function privacyEs(): LegalDocument {
+function privacyEs() {
   // TODO: legal review
   const company = legalText(legal.companyName, "es");
   const nif = legalText(legal.nif, "es");
   const address = legalText(legal.address, "es");
-  const who: Block[] = [
+  const who = [
     paragraph(
       text(`El responsable del tratamiento de tus datos es ${company}, con NIF ${nif} y domicilio en ${address} ("Outfox Energía"). Puedes escribirnos sobre cualquier tema de privacidad a `),
       contact(legal.privacyEmail, "es"),
@@ -181,12 +141,12 @@ function privacyEs(): LegalDocument {
   };
 }
 
-function privacyEn(): LegalDocument {
+function privacyEn() {
   // TODO: legal review
   const company = legalText(legal.companyName, "en");
   const nif = legalText(legal.nif, "en");
   const address = legalText(legal.address, "en");
-  const who: Block[] = [
+  const who = [
     paragraph(
       text(`The controller of your personal data is ${company}, with tax identification number ${nif} and its registered office at ${address} ("Outfox Energía"). You can write to us about any privacy matter at `),
       contact(legal.privacyEmail, "en"),
@@ -266,14 +226,14 @@ function privacyEn(): LegalDocument {
   };
 }
 
-function cookiesEs(): LegalDocument {
+function cookiesEs() {
   // TODO: legal review
   const company = legalText(legal.companyName, "es");
   const rows = cookieRows("es");
-  const which: Block[] = rows.length > 0
+  const which = rows.length > 0
     ? [{ kind: "table", headers: ["Nombre", "Proveedor", "Finalidad", "Tipo", "Propia o de terceros", "Duración"], rows }]
     : [paragraph(text("En este momento esta web no instala cookies ni guarda datos en el almacenamiento local o de sesión del navegador."))];
-  const manage: Block[] = [];
+  const manage = [];
   if (nonEssentialCookies().length > 0) {
     manage.push(paragraph(
       text("Puedes aceptar, rechazar o configurar las cookies en cualquier momento desde "),
@@ -315,14 +275,14 @@ function cookiesEs(): LegalDocument {
   };
 }
 
-function cookiesEn(): LegalDocument {
+function cookiesEn() {
   // TODO: legal review
   const company = legalText(legal.companyName, "en");
   const rows = cookieRows("en");
-  const which: Block[] = rows.length > 0
+  const which = rows.length > 0
     ? [{ kind: "table", headers: ["Name", "Provider", "Purpose", "Type", "First or third party", "Duration"], rows }]
     : [paragraph(text("This site does not currently set cookies or store data in the browser's local or session storage."))];
-  const manage: Block[] = [];
+  const manage = [];
   if (nonEssentialCookies().length > 0) {
     manage.push(paragraph(
       text("You can accept, reject or set cookies at any time from "),
@@ -364,12 +324,12 @@ function cookiesEn(): LegalDocument {
   };
 }
 
-export function legalDocument(page: "privacy" | "cookies", locale: Locale): LegalDocument {
+export function legalDocument(page, locale) {
   if (page === "privacy") return locale === "en" ? privacyEn() : privacyEs();
   return locale === "en" ? cookiesEn() : cookiesEs();
 }
 
-export function consentCopy(locale: Locale): ConsentCopy {
+export function consentCopy(locale) {
   // TODO: legal review
   if (locale === "en") {
     return {

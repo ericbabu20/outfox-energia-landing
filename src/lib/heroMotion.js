@@ -1,21 +1,21 @@
 const easing = "cubic-bezier(0.16, 1, 0.3, 1)";
 
-const rise: Keyframe[] = [
+const rise = [
   { opacity: 0, transform: "translateY(16px)" },
   { opacity: 1, transform: "translateY(0)" },
 ];
 
 /** Plays the hero entrance and returns a cleanup that cancels it. */
-export function playHeroEntrance(root: HTMLElement): () => void {
+export function playHeroEntrance(root) {
   const html = document.documentElement;
   if (!html.classList.contains("motion")) return () => {};
 
-  const running: Animation[] = [];
-  const play = (element: Element | null, keyframes: Keyframe[], delay: number, duration = 760) => {
+  const running = [];
+  const play = (element, keyframes, delay, duration = 760) => {
     const animation = element?.animate(keyframes, { duration, delay, easing, fill: "both" });
     if (animation) running.push(animation);
   };
-  const all = (selector: string) => root.querySelectorAll(selector);
+  const all = (selector) => root.querySelectorAll(selector);
 
   try {
     root.querySelector(".status")?.classList.add("is-in");
