@@ -1,0 +1,89 @@
+export type Locale = "es" | "en";
+
+export interface PromiseLine {
+  word: string;
+  caption: string;
+}
+
+export interface Messages {
+  metaTitle: string;
+  metaDescription: string;
+  ogImageAlt: string;
+  langLabel: string;
+  skip: string;
+  h1a: string;
+  h1b: string;
+  lead: string;
+  status: string;
+  promises: [PromiseLine, PromiseLine, PromiseLine];
+  cardTopKicker: string;
+  cardTop: string;
+  cardBottomKicker: string;
+  cardBottom: string;
+  footerRights: string;
+  privacy: string;
+  cookies: string;
+  privacyTitle: string;
+  privacyBody: string;
+  cookiesTitle: string;
+  cookiesBody: string;
+}
+
+export const messages: Record<Locale, Messages> = {
+  es: {
+    metaTitle: "Outfox Energía — Próximamente en España",
+    metaDescription: "Energía más barata y más simple. Muy pronto, aquí.",
+    ogImageAlt: "Capas luminosas de Outfox Energía",
+    langLabel: "Idioma",
+    skip: "Saltar al contenido",
+    h1a: "Hola,",
+    h1b: "España.",
+    lead: "Llegamos para que la luz sea más barata y más simple.",
+    status: "Próximamente",
+    // TODO: confirm with Marketing/Compliance
+    promises: [
+      { word: "Menos", caption: "factura" },
+      { word: "Más", caption: "control" },
+      { word: "Cero", caption: "líos" },
+    ],
+    cardTopKicker: "Muy pronto",
+    cardTop: "Luz y gas, en un solo lugar.",
+    cardBottomKicker: "Hecho para España",
+    cardBottom: "Energía sencilla, pensada para tu casa.",
+    footerRights: "© 2026 Outfox Energía",
+    privacy: "Privacidad",
+    cookies: "Cookies",
+    privacyTitle: "Privacidad",
+    privacyBody: "Esta página está reservada para la política de privacidad de Outfox Energía.",
+    cookiesTitle: "Cookies",
+    cookiesBody: "Esta página está reservada para la información sobre cookies de Outfox Energía.",
+  },
+  en: {
+    metaTitle: "Outfox Energía — Coming soon to Spain",
+    metaDescription: "Cheaper, simpler energy. Coming soon, right here.",
+    ogImageAlt: "Glowing layers for Outfox Energía",
+    langLabel: "Language",
+    skip: "Skip to content",
+    h1a: "Hola,",
+    h1b: "Spain.",
+    lead: "We're coming to make energy cheaper and simpler.",
+    status: "Coming soon",
+    // TODO: confirm with Marketing/Compliance
+    promises: [
+      { word: "Less", caption: "on your bill" },
+      { word: "More", caption: "control" },
+      { word: "Zero", caption: "hassle" },
+    ],
+    cardTopKicker: "Very soon",
+    cardTop: "Electricity and gas, in one place.",
+    cardBottomKicker: "Made for Spain",
+    cardBottom: "Simple energy, built around your home.",
+    footerRights: "© 2026 Outfox Energía",
+    privacy: "Privacy",
+    cookies: "Cookies",
+    privacyTitle: "Privacy",
+    privacyBody: "This page is reserved for the Outfox Energía privacy policy.",
+    cookiesTitle: "Cookies",
+    cookiesBody: "This page is reserved for Outfox Energía cookie information.",
+  },
+};
