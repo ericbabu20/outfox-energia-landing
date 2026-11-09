@@ -6,9 +6,9 @@
 
 [![Live site](https://img.shields.io/badge/Live-outfox--energia--spain.netlify.app-7B2FF7?style=for-the-badge&logo=netlify&logoColor=white)](https://outfox-energia-spain.netlify.app)
 ![Status](https://img.shields.io/badge/Status-Coming%20soon-FF6B1A?style=for-the-badge)
-![Languages](https://img.shields.io/badge/Languages-ES%20%7C%20EN-1E1B3A?style=for-the-badge)
-![Uploading image.png…]()
 
+
+ 
 
 </div>
 
@@ -19,6 +19,8 @@
 This is a temporary "coming soon" website for **Outfox Energía**. It will stay live while the company setup and processes in Spain are being completed, then be replaced by the full website.
 
 The page introduces the brand, explains what customers can expect, and features the Outfox fox mascot in a Spanish village scene.
+<img width="1850" height="989" alt="image" src="https://github.com/user-attachments/assets/b6599bcf-d946-4f00-b078-280f1bf8815d" />
+
 
 ### Features
 
