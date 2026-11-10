@@ -2,7 +2,7 @@ import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import { Link as RouterLink } from "react-router";
 import { messages } from "../lib/i18n/messages";
-import { cookiesHref, privacyHref } from "../lib/routes";
+import { cookiesHref, legalNoticeHref, privacyHref } from "../lib/routes";
 import { fluidU } from "../theme";
 
 const footerLinkSx = {
@@ -38,6 +38,9 @@ export function Footer({ locale, cookieSettings }) {
       }}
     >
       <span>{copy.footerRights}</span>
+      <Link component={RouterLink} to={legalNoticeHref(locale)} sx={footerLinkSx}>
+        {copy.legalNotice}
+      </Link>
       <Link component={RouterLink} to={privacyHref(locale)} sx={footerLinkSx}>
         {copy.privacy}
       </Link>

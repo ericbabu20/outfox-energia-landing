@@ -1,6 +1,6 @@
 import { cookies, nonEssentialCookies } from "../../config/cookies.js";
 import { legal, legalMarker, legalText } from "../../config/legal.js";
-import { cookiesHref } from "../routes.js";
+import { cookiesHref, privacyHref } from "../routes.js";
 
 const typeLabels = {
   es: { tecnica: "Técnica", preferencias: "Preferencias", analitica: "Analítica", publicidad: "Publicidad" },
@@ -30,8 +30,8 @@ function contact(value, locale) {
   return text(shown);
 }
 
-function updatedLine(locale) {
-  const raw = legal.lastUpdated.trim();
+function updatedLine(locale, isoDate = legal.lastUpdated) {
+  const raw = isoDate.trim();
   if (!raw) return locale === "es" ? `Última actualización: ${legalMarker(locale)}` : `Last updated: ${legalMarker(locale)}`;
   const date = new Date(`${raw}T00:00:00`);
   if (Number.isNaN(date.getTime())) {
@@ -324,8 +324,107 @@ function cookiesEn() {
   };
 }
 
+function noticeFields(locale) {
+  return {
+    company: legalText(legal.companyName, locale),
+    nif: legalText(legal.nif, locale),
+    address: legalText(legal.address, locale),
+    registry: legal.registry.trim() || legalMarker(locale),
+    email: contact(legal.email, locale),
+  };
+}
+
+function noticeEs() {
+  const fields = noticeFields("es");
+  return {
+    title: "Aviso legal",
+    documentTitle: "Aviso legal | Outfox Energía",
+    description: "Aviso legal de Outfox Energía.",
+    updated: updatedLine("es", legal.noticePublished),
+    tocLabel: "En esta página",
+    sections: [
+      {
+        id: "titular",
+        heading: "Titular de esta web",
+        blocks: [
+          paragraph(text(`Esta web pertenece a ${fields.company} ("Outfox Energía").`)),
+          paragraph(text(`Domicilio social: ${fields.address}.`)),
+          paragraph(text(`NIF: ${fields.nif}.`)),
+          paragraph(text(`Inscrita en el Registro Mercantil de ${fields.registry}.`)),
+          paragraph(text("Email: "), fields.email),
+        ],
+      },
+      {
+        id: "sobre",
+        heading: "Sobre esta web",
+        blocks: [
+          paragraph(text("Esta web informa de nuestro próximo lanzamiento en España. Todavía no ofrecemos ni contratamos suministro de energía.")),
+        ],
+      },
+      {
+        id: "privacidad",
+        heading: "Privacidad y cookies",
+        blocks: [
+          paragraph(
+            text("Cómo tratamos tus datos se explica en la "),
+            link("Política de privacidad", privacyHref("es")),
+            text(". El uso de cookies se explica en la "),
+            link("Política de cookies", cookiesHref("es")),
+            text("."),
+          ),
+        ],
+      },
+    ],
+  };
+}
+
+function noticeEn() {
+  const fields = noticeFields("en");
+  return {
+    title: "Legal notice",
+    documentTitle: "Legal notice | Outfox Energía",
+    description: "Legal notice for Outfox Energía.",
+    updated: updatedLine("en", legal.noticePublished),
+    tocLabel: "On this page",
+    sections: [
+      {
+        id: "owner",
+        heading: "Who owns this website",
+        blocks: [
+          paragraph(text(`This website belongs to ${fields.company} ("Outfox Energía").`)),
+          paragraph(text(`Registered office: ${fields.address}.`)),
+          paragraph(text(`Tax ID (NIF): ${fields.nif}.`)),
+          paragraph(text(`Registered in the Mercantile Registry of ${fields.registry}.`)),
+          paragraph(text("Email: "), fields.email),
+        ],
+      },
+      {
+        id: "about",
+        heading: "About this website",
+        blocks: [
+          paragraph(text("This website announces our upcoming launch in Spain. We don't yet supply energy or take sign-ups.")),
+        ],
+      },
+      {
+        id: "privacy",
+        heading: "Privacy and cookies",
+        blocks: [
+          paragraph(
+            text("How we handle your data is explained in our "),
+            link("Privacy policy", privacyHref("en")),
+            text(". Cookie use is explained in our "),
+            link("Cookie policy", cookiesHref("en")),
+            text("."),
+          ),
+        ],
+      },
+    ],
+  };
+}
+
 export function legalDocument(page, locale) {
   if (page === "privacy") return locale === "en" ? privacyEn() : privacyEs();
+  if (page === "notice") return locale === "en" ? noticeEn() : noticeEs();
   return locale === "en" ? cookiesEn() : cookiesEs();
 }
 
