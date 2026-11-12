@@ -1,16 +1,5 @@
-import { cookies, nonEssentialCookies } from "../../config/cookies.js";
-import { legal, legalMarker, legalText } from "../../config/legal.js";
-import { cookiesHref, privacyHref } from "../routes.js";
-
-const typeLabels = {
-  es: { tecnica: "Técnica", preferencias: "Preferencias", analitica: "Analítica", publicidad: "Publicidad" },
-  en: { tecnica: "Technical", preferencias: "Preferences", analitica: "Analytics", publicidad: "Advertising" },
-};
-
-const partyLabels = {
-  es: { propia: "Propia", terceros: "De terceros" },
-  en: { propia: "First-party", terceros: "Third-party" },
-};
+import { legal, legalMarker, legalRegistry, legalText } from "../../config/legal.js";
+import { privacyHref } from "../routes.js";
 
 function text(value) {
   return { kind: "text", text: value };
@@ -45,17 +34,6 @@ function updatedLine(locale, isoDate = legal.lastUpdated) {
   return locale === "es" ? `Última actualización: ${formatted}` : `Last updated: ${formatted}`;
 }
 
-function cookieRows(locale) {
-  return cookies.map((item) => [
-    item.name,
-    item.provider,
-    locale === "es" ? item.purposeEs : item.purposeEn,
-    typeLabels[locale][item.type],
-    partyLabels[locale][item.party],
-    item.duration,
-  ]);
-}
-
 function privacyEs() {
   // TODO: legal review
   const company = legalText(legal.companyName, "es");
@@ -87,11 +65,11 @@ function privacyEs() {
         id: "datos",
         heading: "2. Qué datos tratamos",
         blocks: [
-          paragraph(
-            text("Esta web no pide ni guarda datos personales a través de formularios. El uso de cookies se explica en nuestra "),
-            link("Política de cookies", cookiesHref("es")),
-            text("."),
-          ),
+          paragraph(text("Esta web no tiene formularios, no instala cookies y no guarda nada en tu navegador. Aun así, tratamos algunos datos personales.")),
+          paragraph(text("Datos de tu visita. Al entrar en la web, tu navegador envía tu dirección IP y datos técnicos de la conexión a Netlify, la empresa que aloja la web. Se usan solo para que la web funcione y esté protegida. La base legal es nuestro interés legítimo en tener una web segura y disponible (art. 6.1.f del RGPD). Según sus condiciones, Netlify guarda sus registros 90 días y, archivados, hasta un año.")),
+          paragraph(text("Correos que nos envías. Si nos escribes, usamos tu nombre, tu email y lo que nos cuentes solo para responderte. La base legal es nuestro interés legítimo en atender tu consulta. Guardamos el correo mientras la atendemos y, después, solo el tiempo que exija la ley.")),
+          paragraph(text("Quién recibe tus datos. Nuestros proveedores de alojamiento web y de correo electrónico, que los tratan por cuenta nuestra y siguiendo nuestras instrucciones. No vendemos tus datos ni los cedemos a nadie, salvo obligación legal.")),
+          paragraph(text("Transferencias fuera de la Unión Europea. Netlify, Inc. tiene su sede en Estados Unidos. La transferencia se ampara en el Marco de Privacidad de Datos UE-EE. UU., que cuenta con una decisión de adecuación de la Comisión Europea.")),
         ],
       },
       {
@@ -106,15 +84,13 @@ function privacyEs() {
               [text("rectificarlos si son inexactos;")],
               [text("suprimirlos;")],
               [text("oponerte a su tratamiento;")],
-              [text("limitar su tratamiento;")],
-              [text("recibirlos en un formato estructurado (portabilidad);")],
-              [text("retirar tu consentimiento.")],
+              [text("limitar su tratamiento.")],
             ],
           },
           paragraph(
             text("Para ejercer tus derechos, escríbenos a "),
             contact(legal.privacyEmail, "es"),
-            text(". Es gratuito y te responderemos en un plazo máximo de un mes. Si es necesario, te pediremos información para confirmar tu identidad."),
+            text(". Es gratuito. Te responderemos en el plazo de un mes. Si la petición es compleja, podemos ampliarlo dos meses más y te avisaremos dentro del primer mes. Si es necesario, te pediremos información para confirmar tu identidad."),
           ),
           paragraph(
             text("Si crees que no hemos tratado bien tus datos, puedes presentar una reclamación ante la Agencia Española de Protección de Datos ("),
@@ -172,34 +148,32 @@ function privacyEn() {
         id: "data",
         heading: "2. What data we process",
         blocks: [
-          paragraph(
-            text("This website does not ask for or store personal data through forms. Cookie use is explained in our "),
-            link("Cookie policy", cookiesHref("en")),
-            text("."),
-          ),
+          paragraph(text("This website has no forms, sets no cookies and stores nothing in your browser. We still process some personal data.")),
+          paragraph(text("Visit data. When you open the website, your browser sends your IP address and technical connection data to Netlify, the company that hosts it. This data is used only to run the website and keep it secure. Our legal basis is our legitimate interest in a secure, available website (GDPR art. 6(1)(f)). Under its terms, Netlify keeps its logs for 90 days, and archived copies for up to one year.")),
+          paragraph(text("Emails you send us. If you write to us, we use your name, email address and message only to reply. Our legal basis is our legitimate interest in answering you. We keep the email while we deal with your query, then only as long as the law requires.")),
+          paragraph(text("Who receives your data. Our web hosting and email providers, which process it on our behalf and on our instructions. We don't sell your data or share it with anyone else unless the law requires it.")),
+          paragraph(text("Transfers outside the European Union. Netlify, Inc. is based in the United States. The transfer relies on the EU-U.S. Data Privacy Framework, which has an adequacy decision from the European Commission.")),
         ],
       },
       {
         id: "rights",
         heading: "3. Your rights",
         blocks: [
-          paragraph(text("You can ask us at any time:")),
+          paragraph(text("You can ask us at any time to:")),
           {
             kind: "ul",
             items: [
-              [text("to access your data;")],
-              [text("to correct it if it is inaccurate;")],
-              [text("to delete it;")],
-              [text("to object to its processing;")],
-              [text("to restrict its processing;")],
-              [text("to receive it in a structured format (portability);")],
-              [text("to withdraw your consent.")],
+              [text("access your data;")],
+              [text("correct it if it is inaccurate;")],
+              [text("delete it;")],
+              [text("object to its processing;")],
+              [text("restrict its processing.")],
             ],
           },
           paragraph(
             text("To exercise your rights, write to us at "),
             contact(legal.privacyEmail, "en"),
-            text(". This is free of charge and we will reply within one month at most. If we need to, we will ask you for information to confirm your identity."),
+            text(". This is free of charge. We will reply within one month. If your request is complex, we may extend this by two months, and we will tell you within the first month. If we need to, we will ask you for information to confirm your identity."),
           ),
           paragraph(
             text("If you believe we have not handled your data properly, you can lodge a complaint with the Spanish Data Protection Agency ("),
@@ -226,111 +200,13 @@ function privacyEn() {
   };
 }
 
-function cookiesEs() {
-  // TODO: legal review
-  const company = legalText(legal.companyName, "es");
-  const rows = cookieRows("es");
-  const which = rows.length > 0
-    ? [{ kind: "table", headers: ["Nombre", "Proveedor", "Finalidad", "Tipo", "Propia o de terceros", "Duración"], rows }]
-    : [paragraph(text("En este momento esta web no instala cookies ni guarda datos en el almacenamiento local o de sesión del navegador."))];
-  const manage = [];
-  if (nonEssentialCookies().length > 0) {
-    manage.push(paragraph(
-      text("Puedes aceptar, rechazar o configurar las cookies en cualquier momento desde "),
-      link("Configurar cookies", "#cookie-settings"),
-      text("."),
-    ));
-  }
-  manage.push(paragraph(text("También puedes bloquear o borrar las cookies desde la configuración de tu navegador. Si bloqueas las cookies técnicas, es posible que algunas partes de la web no funcionen bien.")));
-  return {
-    title: "Política de cookies",
-    documentTitle: "Política de cookies | Outfox Energía",
-    description: "Política de cookies de Outfox Energía.",
-    updated: updatedLine("es"),
-    tocLabel: "En esta página",
-    sections: [
-      {
-        id: "que-son",
-        heading: "1. Qué son las cookies",
-        blocks: [paragraph(text("Las cookies son pequeños archivos que una web guarda en tu navegador cuando la visitas. Sirven, por ejemplo, para que la web funcione o para recordar tus preferencias. Esta política también cubre tecnologías parecidas, como el almacenamiento local del navegador."))],
-      },
-      {
-        id: "quien",
-        heading: "2. Quién las utiliza",
-        blocks: [paragraph(text(`Las cookies de esta web las gestiona ${company} ("Outfox Energía"). Si en el futuro usamos cookies de otras empresas, lo indicaremos en la tabla de abajo.`))],
-      },
-      { id: "cuales", heading: "3. Qué cookies usamos", blocks: which },
-      {
-        id: "consentimiento",
-        heading: "4. Cuándo necesitamos tu consentimiento",
-        blocks: [paragraph(text("Las cookies técnicas, necesarias para que la web funcione o para darte un servicio que has pedido, no necesitan tu consentimiento (artículo 22.2 de la LSSI-CE). Cualquier otra cookie, como las de análisis o publicidad, solo se instalará si la aceptas."))],
-      },
-      { id: "gestionar", heading: "5. Cómo gestionar las cookies", blocks: manage },
-      {
-        id: "cambios",
-        heading: "6. Cambios en esta política",
-        blocks: [paragraph(text("Si cambiamos las cookies que usamos, actualizaremos esta página y su fecha de actualización."))],
-      },
-    ],
-  };
-}
-
-function cookiesEn() {
-  // TODO: legal review
-  const company = legalText(legal.companyName, "en");
-  const rows = cookieRows("en");
-  const which = rows.length > 0
-    ? [{ kind: "table", headers: ["Name", "Provider", "Purpose", "Type", "First or third party", "Duration"], rows }]
-    : [paragraph(text("This site does not currently set cookies or store data in the browser's local or session storage."))];
-  const manage = [];
-  if (nonEssentialCookies().length > 0) {
-    manage.push(paragraph(
-      text("You can accept, reject or set cookies at any time from "),
-      link("Cookie settings", "#cookie-settings"),
-      text("."),
-    ));
-  }
-  manage.push(paragraph(text("You can also block or delete cookies in your browser settings. If you block technical cookies, some parts of the site may not work properly.")));
-  return {
-    title: "Cookie policy",
-    documentTitle: "Cookie policy | Outfox Energía",
-    description: "Outfox Energía cookie policy.",
-    updated: updatedLine("en"),
-    tocLabel: "On this page",
-    sections: [
-      {
-        id: "what",
-        heading: "1. What cookies are",
-        blocks: [paragraph(text("Cookies are small files that a website stores on your browser when you visit it. They are used, for example, to make the site work or to remember your preferences. This policy also covers similar technologies, such as the browser's local storage."))],
-      },
-      {
-        id: "who",
-        heading: "2. Who uses them",
-        blocks: [paragraph(text(`Cookies on this site are managed by ${company} ("Outfox Energía"). If we use cookies from other companies in the future, we will say so in the table below.`))],
-      },
-      { id: "which", heading: "3. Which cookies we use", blocks: which },
-      {
-        id: "consent",
-        heading: "4. When we need your consent",
-        blocks: [paragraph(text("Technical cookies, which are needed for the site to work or to provide a service you have asked for, do not need your consent (Article 22(2) of the Spanish Information Society Services Law, LSSI-CE). Any other cookie, such as analytics or advertising cookies, will be set only if you accept it."))],
-      },
-      { id: "manage", heading: "5. How to manage cookies", blocks: manage },
-      {
-        id: "changes",
-        heading: "6. Changes to this policy",
-        blocks: [paragraph(text("If we change the cookies we use, we will update this page and its update date."))],
-      },
-    ],
-  };
-}
-
 function noticeFields(locale) {
   return {
     company: legalText(legal.companyName, locale),
     nif: legalText(legal.nif, locale),
     address: legalText(legal.address, locale),
-    registry: legal.registry.trim() || legalMarker(locale),
-    email: contact(legal.email, locale),
+    registry: legalRegistry(locale),
+    soleDirector: legalText(legal.soleDirector, locale),
   };
 }
 
@@ -351,7 +227,7 @@ function noticeEs() {
           paragraph(text(`Domicilio social: ${fields.address}.`)),
           paragraph(text(`NIF: ${fields.nif}.`)),
           paragraph(text(`Inscrita en el Registro Mercantil de ${fields.registry}.`)),
-          paragraph(text("Email: "), fields.email),
+          paragraph(text(`Administrador único: ${fields.soleDirector}.`)),
         ],
       },
       {
@@ -363,14 +239,12 @@ function noticeEs() {
       },
       {
         id: "privacidad",
-        heading: "Privacidad y cookies",
+        heading: "Privacidad",
         blocks: [
           paragraph(
             text("Cómo tratamos tus datos se explica en la "),
             link("Política de privacidad", privacyHref("es")),
-            text(". El uso de cookies se explica en la "),
-            link("Política de cookies", cookiesHref("es")),
-            text("."),
+            text(". Esta web no instala cookies."),
           ),
         ],
       },
@@ -395,7 +269,7 @@ function noticeEn() {
           paragraph(text(`Registered office: ${fields.address}.`)),
           paragraph(text(`Tax ID (NIF): ${fields.nif}.`)),
           paragraph(text(`Registered in the Mercantile Registry of ${fields.registry}.`)),
-          paragraph(text("Email: "), fields.email),
+          paragraph(text(`Sole director: ${fields.soleDirector}.`)),
         ],
       },
       {
@@ -407,14 +281,12 @@ function noticeEn() {
       },
       {
         id: "privacy",
-        heading: "Privacy and cookies",
+        heading: "Privacy",
         blocks: [
           paragraph(
             text("How we handle your data is explained in our "),
             link("Privacy policy", privacyHref("en")),
-            text(". Cookie use is explained in our "),
-            link("Cookie policy", cookiesHref("en")),
-            text("."),
+            text(". This website does not set cookies."),
           ),
         ],
       },
@@ -424,8 +296,7 @@ function noticeEn() {
 
 export function legalDocument(page, locale) {
   if (page === "privacy") return locale === "en" ? privacyEn() : privacyEs();
-  if (page === "notice") return locale === "en" ? noticeEn() : noticeEs();
-  return locale === "en" ? cookiesEn() : cookiesEs();
+  return locale === "en" ? noticeEn() : noticeEs();
 }
 
 export function consentCopy(locale) {

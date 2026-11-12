@@ -17,7 +17,7 @@ import { nonEssentialCookies } from "../config/cookies";
 import { usePageShell, setMeta } from "../lib/document";
 import { consentCopy, legalDocument } from "../lib/i18n/legal";
 import { messages } from "../lib/i18n/messages";
-import { cookiesHref, homeHref, legalNoticeHref, privacyHref } from "../lib/routes";
+import { homeHref, legalNoticeHref, privacyHref } from "../lib/routes";
 import { fluidU } from "../theme";
 
 const consentEnabled = nonEssentialCookies().length > 0;
@@ -43,7 +43,7 @@ export function LegalPage({ page, locale }) {
   }, [doc.documentTitle, doc.description]);
 
   const switchLocale = (next) => {
-    const href = page === "privacy" ? privacyHref : page === "notice" ? legalNoticeHref : cookiesHref;
+    const href = page === "privacy" ? privacyHref : legalNoticeHref;
     navigate(href(next));
   };
 

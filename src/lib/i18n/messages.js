@@ -22,11 +22,8 @@ export const messages = {
     footerRights: "© 2026 Outfox Energía",
     legalNotice: "Aviso legal",
     privacy: "Privacidad",
-    cookies: "Cookies",
     privacyTitle: "Privacidad",
     privacyBody: "Esta página está reservada para la política de privacidad de Outfox Energía.",
-    cookiesTitle: "Cookies",
-    cookiesBody: "Esta página está reservada para la información sobre cookies de Outfox Energía.",
   },
   en: {
     metaTitle: "Outfox Energía — Coming soon to Spain",
@@ -51,10 +48,7 @@ export const messages = {
     footerRights: "© 2026 Outfox Energía",
     legalNotice: "Legal notice",
     privacy: "Privacy",
-    cookies: "Cookies",
     privacyTitle: "Privacy",
     privacyBody: "This page is reserved for the Outfox Energía privacy policy.",
-    cookiesTitle: "Cookies",
-    cookiesBody: "This page is reserved for Outfox Energía cookie information.",
   },
 };
